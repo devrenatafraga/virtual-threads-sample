@@ -42,15 +42,21 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Run tests and generate coverage
-        run: ./gradlew clean test jacocoTestReport --info
+      - name: Build and run tests with coverage
+        run: ./gradlew clean build test jacocoTestReport --info
 
-      - name: Verify coverage report exists
+      - name: Verify build directories and coverage report
         run: |
+          echo "Checking build directories..."
+          echo "Main classes: $(find build/classes/java/main -name "*.class" 2>/dev/null | wc -l || echo '0') files"
+          echo "Test classes: $(find build/classes/java/test -name "*.class" 2>/dev/null | wc -l || echo '0') files"
+          
           echo "Checking if JaCoCo report exists..."
           if [ -f "build/reports/jacoco/test/jacocoTestReport.xml" ]; then
             echo "✅ JaCoCo report found"
             echo "Report size: $(wc -l < build/reports/jacoco/test/jacocoTestReport.xml) lines"
+            echo "Report preview:"
+            head -5 build/reports/jacoco/test/jacocoTestReport.xml
           else
             echo "❌ JaCoCo report not found"
             exit 1

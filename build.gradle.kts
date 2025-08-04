@@ -55,14 +55,13 @@ sonar {
 		property("sonar.java.source", "21")
 		property("sonar.sourceEncoding", "UTF-8")
 		
-		// Binary directories (important for proper analysis)
-		property("sonar.java.binaries", "build/classes/java/main")
-		property("sonar.java.test.binaries", "build/classes/java/test")
-		// Libraries will be resolved automatically by Gradle
+		// Binary directories - using layout.buildDirectory for Gradle 8+
+		property("sonar.java.binaries", "${layout.buildDirectory.get()}/classes/java/main")
+		property("sonar.java.test.binaries", "${layout.buildDirectory.get()}/classes/java/test")
 		
 		// Coverage report paths
-		property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
-		property("sonar.junit.reportPaths", "build/test-results/test")
+		property("sonar.coverage.jacoco.xmlReportPaths", "${layout.buildDirectory.get()}/reports/jacoco/test/jacocoTestReport.xml")
+		property("sonar.junit.reportPaths", "${layout.buildDirectory.get()}/test-results/test")
 		
 		// Exclusions
 		property("sonar.exclusions", "**/build/**,**/target/**")
@@ -75,9 +74,13 @@ sonar {
 
 // Task dependencies to ensure proper execution order
 tasks.named("sonar") {
-	dependsOn("test", "jacocoTestReport")
+	dependsOn("build", "test", "jacocoTestReport")
 }
 
 tasks.named("jacocoTestReport") {
 	dependsOn("test")
+}
+
+tasks.named("build") {
+	dependsOn("compileJava", "compileTestJava")
 }
