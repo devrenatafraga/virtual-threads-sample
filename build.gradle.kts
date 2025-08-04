@@ -58,7 +58,7 @@ sonar {
 		// Binary directories (important for proper analysis)
 		property("sonar.java.binaries", "build/classes/java/main")
 		property("sonar.java.test.binaries", "build/classes/java/test")
-		property("sonar.java.libraries", "build/libs")
+		// Libraries will be resolved automatically by Gradle
 		
 		// Coverage report paths
 		property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
