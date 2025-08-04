@@ -46,9 +46,38 @@ sonar {
 		property("sonar.projectKey", "devrenatafraga_virtual-threads-sample")
 		property("sonar.organization", "devrenatafraga")
 		property("sonar.host.url", "https://sonarcloud.io")
-		property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
-		property("sonar.java.source", "21")
+		property("sonar.projectName", "Virtual Threads Sample")
+		property("sonar.projectVersion", "1.0")
+		
+		// Source and test directories
 		property("sonar.sources", "src/main/java")
 		property("sonar.tests", "src/test/java")
+		property("sonar.java.source", "21")
+		property("sonar.sourceEncoding", "UTF-8")
+		
+		// Binary directories (important for proper analysis)
+		property("sonar.java.binaries", "build/classes/java/main")
+		property("sonar.java.test.binaries", "build/classes/java/test")
+		property("sonar.java.libraries", "build/libs")
+		
+		// Coverage report paths
+		property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
+		property("sonar.junit.reportPaths", "build/test-results/test")
+		
+		// Exclusions
+		property("sonar.exclusions", "**/build/**,**/target/**")
+		property("sonar.test.exclusions", "**/*Test.java,**/*Tests.java")
+		
+		// JaCoCo plugin configuration
+		property("sonar.java.coveragePlugin", "jacoco")
 	}
+}
+
+// Task dependencies to ensure proper execution order
+tasks.named("sonar") {
+	dependsOn("test", "jacocoTestReport")
+}
+
+tasks.named("jacocoTestReport") {
+	dependsOn("test")
 }
