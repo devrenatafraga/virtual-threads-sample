@@ -54,9 +54,10 @@ jobs:
           echo "Checking if JaCoCo report exists..."
           if [ -f "build/reports/jacoco/test/jacocoTestReport.xml" ]; then
             echo "✅ JaCoCo report found"
-            echo "Report size: $(wc -l < build/reports/jacoco/test/jacocoTestReport.xml) lines"
+            echo "Report size: $(wc -c < build/reports/jacoco/test/jacocoTestReport.xml) bytes"
+            echo "Coverage data points: $(grep -o 'covered="[0-9]*"' build/reports/jacoco/test/jacocoTestReport.xml | wc -l)"
             echo "Report preview:"
-            head -5 build/reports/jacoco/test/jacocoTestReport.xml
+            head -c 500 build/reports/jacoco/test/jacocoTestReport.xml
           else
             echo "❌ JaCoCo report not found"
             exit 1
