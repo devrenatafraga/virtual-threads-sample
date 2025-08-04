@@ -53,3 +53,6 @@ Thumbs.db
 # Spring Boot
 *.pid
 *.tmp
+
+# Binary output
+bin/
